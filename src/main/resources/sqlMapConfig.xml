@@ -7,6 +7,8 @@
         <package name="com.decorate.ssm.po"/>
     </typeAliases>
     <plugins>
-        <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <property name="reasonable" value="true"/>
+        </plugin>
     </plugins>
 </configuration>
