@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void addUser(User user) throws Exception {
 		if (user!=null) {
-			int count = userMapper.insert(user);
+			int count = userMapper.insertSelective(user);
 			System.out.println("成功插入" + count + "个用户");
 		}
 	}

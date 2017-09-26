@@ -1,5 +1,6 @@
 package com.decorate.ssm.controller;
 
+import java.security.MessageDigest;
 import java.util.List;
 
 import com.decorate.ssm.utils.DecorateMessage;
@@ -8,10 +9,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.decorate.ssm.po.User;
@@ -93,10 +91,11 @@ public class UserController {
 	}
 	
 	//添加用户信息
-	@RequestMapping("/addUser")
-	public String addUser(User user) throws Exception{
+	@RequestMapping(value = "/addUser",method = RequestMethod.POST)
+	@ResponseBody
+	public DecorateMessage addUser(User user) throws Exception{
 		userService.addUser(user);
-		return "/success";
+		return DecorateMessage.success();
 	}
 	
 	//根据id查询用户信息
