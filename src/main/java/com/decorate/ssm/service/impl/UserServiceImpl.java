@@ -2,6 +2,7 @@ package com.decorate.ssm.service.impl;
 
 import java.util.List;
 
+import com.decorate.ssm.po.UserExample;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -79,6 +80,21 @@ public class UserServiceImpl implements UserService{
 		BeanUtils.copyProperties(user, userCustom);
 		return userCustom;
 		
+	}
+
+	/**
+	 *
+	 * @param userName 校验用户名
+	 * @return count == 0 true 代表当前用户名可用 false代表不可用
+	 * @throws Exception
+	 */
+	@Override
+	public boolean checkUser(String userName) throws Exception {
+		UserExample example = new UserExample();
+		UserExample.Criteria criteria = example.createCriteria();
+		criteria.andUserNameEqualTo(userName);
+		 long count = userMapper.countByExample(example);
+		return count == 0;
 	}
 
 }

@@ -28,7 +28,8 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
-	
+
+
 	//查询用户信息
 	@RequestMapping("/queryUser")
 	public ModelAndView queryUser(UserQueryVo userQueryVo) throws Exception{
@@ -120,6 +121,24 @@ public class UserController {
 	public @ResponseBody UserCustom resultJson(@PathVariable("id") Integer id) throws Exception{
 		UserCustom userCustom = userService.findUserById(id);
 		return userCustom;
+	}
+
+	/**
+	 * 检查用户名是否可用
+	 * @param userName 页面传过来的用户名
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/checkUser",method = RequestMethod.POST)
+	@ResponseBody
+	public DecorateMessage checkUser(String userName) throws Exception{
+		boolean b = userService.checkUser(userName);
+		if (b){
+			return DecorateMessage.success();
+		}else {
+			return DecorateMessage.fail();
+		}
+
 	}
 	
 }

@@ -239,7 +239,8 @@
     $("#user_add_modal_btn").click(function () {
         //发送ajax请求，查出部门信息，显示在下拉列表中
         //getDepts()
-        //弹出模态框
+        //弹出模态框,清除表单数据（表单重置）
+        $("#user_info")[0].reset();
         $('#userAddModal').modal({
             backdrop: 'static'
         });
@@ -258,8 +259,10 @@
             }
         });
     }*/
+
     /**
      * 保存员工的方法
+     * 前端校验 校验用户输入的用户名和邮箱是否正确
      */
     function validate_add_form() {
         //1.拿到需要校验的数据，使用正则表达式
@@ -288,6 +291,28 @@
         //
     }
 
+    /**
+     * 校验用户名是否存在
+     */
+    $("#userName").change(function () {
+        //发送ajax请求校验用户名是否存在
+        var userName = $("#userName").val();
+        $.ajax({
+            url: "${pageContext.request.contextPath}/main/checkUser.action",
+            type: "post",
+            data: "userName=" + userName,
+            success: function (result) {
+                if (result.code == "200") {
+                    show_validate_msg("#userName", "success", "用户名可用");
+                    $("#user_save").attr("ajax_result", "success");
+                } else {
+                    show_validate_msg("#userName", "error", "用户名已存在");
+                    $("#user_save").attr("ajax_result", "error");
+                }
+            }
+        });
+    });
+
     function show_validate_msg(ele, status, msg) {
         //清除当前元素的校验状态
         $(ele).parent().removeClass("has-success has-error");
@@ -306,6 +331,11 @@
         if (!validate_add_form()) {
             return false;
         }
+        if ($("#user_save").attr("ajax_result") =="error"){
+            return false;
+        }
+        //这里还需要进行用户名的校验如果成功了，再进行数据的添加
+
         //将模态框中的的数据保存到数据库
         $.ajax({
             url: "${pageContext.request.contextPath}/main/addUser.action",

@@ -56,4 +56,6 @@ public interface UserService {
 	 * @throws Exception
 	 */
 	UserCustom findUserById(Integer id) throws Exception;
+
+	boolean checkUser(String userName) throws Exception;
 }
