@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.decorate.ssm.mapper.ProfessionMapper" >
+  <resultMap id="BaseResultMap" type="com.decorate.ssm.po.Profession" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="profName" property="profname" jdbcType="VARCHAR" />
+    <result column="profDesc" property="profdesc" jdbcType="VARCHAR" />
+    <result column="createDT" property="createdt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, profName, profDesc, createDT
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.decorate.ssm.po.ProfessionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from profession
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from profession
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from profession
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.decorate.ssm.po.ProfessionExample" >
+    delete from profession
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.decorate.ssm.po.Profession" >
+    insert into profession (Id, profName, profDesc, 
+      createDT)
+    values (#{id,jdbcType=INTEGER}, #{profname,jdbcType=VARCHAR}, #{profdesc,jdbcType=VARCHAR}, 
+      #{createdt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.decorate.ssm.po.Profession" >
+    insert into profession
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="profname != null" >
+        profName,
+      </if>
+      <if test="profdesc != null" >
+        profDesc,
+      </if>
+      <if test="createdt != null" >
+        createDT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="profname != null" >
+        #{profname,jdbcType=VARCHAR},
+      </if>
+      <if test="profdesc != null" >
+        #{profdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createdt != null" >
+        #{createdt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.decorate.ssm.po.ProfessionExample" resultType="java.lang.Integer" >
+    select count(*) from profession
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update profession
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.profname != null" >
+        profName = #{record.profname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profdesc != null" >
+        profDesc = #{record.profdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdt != null" >
+        createDT = #{record.createdt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update profession
+    set Id = #{record.id,jdbcType=INTEGER},
+      profName = #{record.profname,jdbcType=VARCHAR},
+      profDesc = #{record.profdesc,jdbcType=VARCHAR},
+      createDT = #{record.createdt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.decorate.ssm.po.Profession" >
+    update profession
+    <set >
+      <if test="profname != null" >
+        profName = #{profname,jdbcType=VARCHAR},
+      </if>
+      <if test="profdesc != null" >
+        profDesc = #{profdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createdt != null" >
+        createDT = #{createdt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.decorate.ssm.po.Profession" >
+    update profession
+    set profName = #{profname,jdbcType=VARCHAR},
+      profDesc = #{profdesc,jdbcType=VARCHAR},
+      createDT = #{createdt,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

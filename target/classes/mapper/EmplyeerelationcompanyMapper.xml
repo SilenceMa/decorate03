@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.decorate.ssm.mapper.EmplyeerelationcompanyMapper" >
+  <resultMap id="BaseResultMap" type="com.decorate.ssm.po.Emplyeerelationcompany" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="company_Id" property="companyId" jdbcType="INTEGER" />
+    <result column="actor_Id" property="actorId" jdbcType="INTEGER" />
+    <result column="emp_Id" property="empId" jdbcType="INTEGER" />
+    <result column="createDT" property="createdt" jdbcType="TIMESTAMP" />
+    <result column="prof_Id" property="profId" jdbcType="INTEGER" />
+    <result column="isOwner" property="isowner" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, company_Id, actor_Id, emp_Id, createDT, prof_Id, isOwner
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.decorate.ssm.po.EmplyeerelationcompanyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from emplyeerelationcompany
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from emplyeerelationcompany
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from emplyeerelationcompany
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.decorate.ssm.po.EmplyeerelationcompanyExample" >
+    delete from emplyeerelationcompany
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.decorate.ssm.po.Emplyeerelationcompany" >
+    insert into emplyeerelationcompany (Id, company_Id, actor_Id, 
+      emp_Id, createDT, prof_Id, 
+      isOwner)
+    values (#{id,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, #{actorId,jdbcType=INTEGER}, 
+      #{empId,jdbcType=INTEGER}, #{createdt,jdbcType=TIMESTAMP}, #{profId,jdbcType=INTEGER}, 
+      #{isowner,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.decorate.ssm.po.Emplyeerelationcompany" >
+    insert into emplyeerelationcompany
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="companyId != null" >
+        company_Id,
+      </if>
+      <if test="actorId != null" >
+        actor_Id,
+      </if>
+      <if test="empId != null" >
+        emp_Id,
+      </if>
+      <if test="createdt != null" >
+        createDT,
+      </if>
+      <if test="profId != null" >
+        prof_Id,
+      </if>
+      <if test="isowner != null" >
+        isOwner,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="actorId != null" >
+        #{actorId,jdbcType=INTEGER},
+      </if>
+      <if test="empId != null" >
+        #{empId,jdbcType=INTEGER},
+      </if>
+      <if test="createdt != null" >
+        #{createdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="profId != null" >
+        #{profId,jdbcType=INTEGER},
+      </if>
+      <if test="isowner != null" >
+        #{isowner,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.decorate.ssm.po.EmplyeerelationcompanyExample" resultType="java.lang.Integer" >
+    select count(*) from emplyeerelationcompany
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update emplyeerelationcompany
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.companyId != null" >
+        company_Id = #{record.companyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.actorId != null" >
+        actor_Id = #{record.actorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.empId != null" >
+        emp_Id = #{record.empId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdt != null" >
+        createDT = #{record.createdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.profId != null" >
+        prof_Id = #{record.profId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isowner != null" >
+        isOwner = #{record.isowner,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update emplyeerelationcompany
+    set Id = #{record.id,jdbcType=INTEGER},
+      company_Id = #{record.companyId,jdbcType=INTEGER},
+      actor_Id = #{record.actorId,jdbcType=INTEGER},
+      emp_Id = #{record.empId,jdbcType=INTEGER},
+      createDT = #{record.createdt,jdbcType=TIMESTAMP},
+      prof_Id = #{record.profId,jdbcType=INTEGER},
+      isOwner = #{record.isowner,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.decorate.ssm.po.Emplyeerelationcompany" >
+    update emplyeerelationcompany
+    <set >
+      <if test="companyId != null" >
+        company_Id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="actorId != null" >
+        actor_Id = #{actorId,jdbcType=INTEGER},
+      </if>
+      <if test="empId != null" >
+        emp_Id = #{empId,jdbcType=INTEGER},
+      </if>
+      <if test="createdt != null" >
+        createDT = #{createdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="profId != null" >
+        prof_Id = #{profId,jdbcType=INTEGER},
+      </if>
+      <if test="isowner != null" >
+        isOwner = #{isowner,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.decorate.ssm.po.Emplyeerelationcompany" >
+    update emplyeerelationcompany
+    set company_Id = #{companyId,jdbcType=INTEGER},
+      actor_Id = #{actorId,jdbcType=INTEGER},
+      emp_Id = #{empId,jdbcType=INTEGER},
+      createDT = #{createdt,jdbcType=TIMESTAMP},
+      prof_Id = #{profId,jdbcType=INTEGER},
+      isOwner = #{isowner,jdbcType=INTEGER}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
