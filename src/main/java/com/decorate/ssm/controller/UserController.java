@@ -1,7 +1,9 @@
 package com.decorate.ssm.controller;
 
 import java.security.MessageDigest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.decorate.ssm.utils.DecorateMessage;
 import com.github.pagehelper.PageHelper;
@@ -9,6 +11,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,6 +21,8 @@ import com.decorate.ssm.po.User;
 import com.decorate.ssm.po.UserCustom;
 import com.decorate.ssm.po.UserQueryVo;
 import com.decorate.ssm.service.UserService;
+
+import javax.validation.Valid;
 
 /**
  * 主界面，用来进行用户信息的查看，添加、删除
@@ -75,14 +82,11 @@ public class UserController {
 	}
 	//根据id删除用户信息
 	@RequestMapping("/deleteUserById")
-	public String deleteUserById(@RequestParam(value="id",required = true,defaultValue="0") Integer user_id) throws Exception{
-		try {
-			userService.deleteUser(user_id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "/error";
-		}
-		return "/success";
+	@ResponseBody
+	public DecorateMessage deleteUserById(Integer id) throws Exception{
+
+			userService.deleteUser(id);
+			return DecorateMessage.success();
 	}
 	
 	//批量删除用户信息
@@ -92,11 +96,28 @@ public class UserController {
 	}
 	
 	//添加用户信息
+
+	/**
+	 * JSR303校验 需要hibernate-validate jar包的支持
+	 */
 	@RequestMapping(value = "/addUser",method = RequestMethod.POST)
 	@ResponseBody
-	public DecorateMessage addUser(User user) throws Exception{
+	public DecorateMessage addUser(@Valid User user, BindingResult result) throws Exception{
+		Map<String,Object> map = new HashMap<>();
+		if (result.hasErrors()){
+			//校验失败，在模态框中显示校验失败的错误信息
+
+			List<FieldError> errors = result.getFieldErrors();
+			for (FieldError error: errors) {
+
+				System.out.println("错误字段名"+error.getField()+"错误信息"+error.getDefaultMessage());
+				map.put(error.getField(),error.getDefaultMessage());
+			}
+			return DecorateMessage.fail().add("errorFields",map);
+		}else {
 		userService.addUser(user);
 		return DecorateMessage.success();
+		}
 	}
 	
 	//根据id查询用户信息
@@ -132,13 +153,40 @@ public class UserController {
 	@RequestMapping(value = "/checkUser",method = RequestMethod.POST)
 	@ResponseBody
 	public DecorateMessage checkUser(String userName) throws Exception{
+		//先判断用户名是否为合法的表达式
+		String regx = "(^[a-zA-Z0-9_-]{6,16}$)|(^[\\u2e80-\\u9fff]{2,8})";
+		if (!userName.matches(regx)){
+			return DecorateMessage.fail().add("va_msg","请输入6-16位英文或数字组合或2-8个中文字符");
+		}
+		//数据库用户名重复校验
 		boolean b = userService.checkUser(userName);
 		if (b){
 			return DecorateMessage.success();
 		}else {
-			return DecorateMessage.fail();
+			return DecorateMessage.fail().add("va_msg","用户名不可用");
 		}
 
 	}
+
+	/**
+	 * 查询用户信息
+	 * @param id 用户id
+	 * @return 用户信息
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getUser",method = RequestMethod.GET)
+	@ResponseBody
+	public DecorateMessage getUser(Integer id) throws Exception{
+		UserCustom user = userService.findUserById(id);
+		return DecorateMessage.success().add("userInfo",user);
+	}
+
+	@RequestMapping(value = "/userUpdate",method =RequestMethod.POST)
+	@ResponseBody
+	public DecorateMessage userUpdate(Integer id,User user) throws Exception{
+		userService.updateUserInfo(id,user);
+		return DecorateMessage.success();
+	}
+
 	
 }

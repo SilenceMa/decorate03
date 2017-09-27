@@ -58,4 +58,6 @@ public interface UserService {
 	UserCustom findUserById(Integer id) throws Exception;
 
 	boolean checkUser(String userName) throws Exception;
+
+	void updateUserInfo(Integer id, User user) throws Exception;
 }

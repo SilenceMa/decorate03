@@ -97,4 +97,10 @@ public class UserServiceImpl implements UserService{
 		return count == 0;
 	}
 
+	@Override
+	public void updateUserInfo(Integer id, User user) throws Exception {
+		user.setId(id);
+		userMapper.updateByPrimaryKeySelective(user);
+	}
+
 }
