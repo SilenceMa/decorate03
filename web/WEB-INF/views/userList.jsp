@@ -217,7 +217,7 @@
         var users = result.extend.pageInfo.list;
         $.each(users, function (index, item) {
             var checkBox = $("<td><input type ='checkbox' class ='check_item'/></td>");
-            var user_id = $("<td></td>").append(item.id);
+            var user_id = $("<td></td>").append(item.id).addClass("user_");
             var user_userName = $("<td></td>").append(item.userName);
             var user_password = $("<td></td>").append(item.password);
             var user_phone = $("<td></td>").append(item.phone);
@@ -458,14 +458,14 @@
         });
     });
     //2.单个删除员工信息
-    $(Document).on("click", ".delete_btn", function () {
+    $(document).on("click", ".delete_btn", function () {
         //弹出确认对话框框
-        var userName = $(".delete_btn").parents("tr").find("td:eq(2)").text;
+        var userName = $(this).parents("tr").find("td:eq(2)").text;
         if (confirm("确认删除【" + userName + "】吗？")) {
             //点击确认删除即可
             $.ajax({
-                url: "${pageContext.request.contextPath}/main/deleteUserById.action",
-                data: "id+" + $(".deleteBtn").attr("delete_user_id"),
+                url: "${pageContext.request.contextPath}/main/deleteUser.action",
+                data: "users_id=" + $(this).attr("delete_user_id"),
                 type: "post",
                 success:function (result) {
                     alert(result.message);
@@ -534,13 +534,32 @@
     });
     //全选删除
     $("#user_delete_all_btn").click(function () {
-        var  users = "";
-        $.each2($(".check_item:checked"),function () {
-            users += $(".check_item").parents("tr").find("td:eq(2)").text() +",";
+        var users = "";
+        var user_ids = "";
+        $.each($(".check_item:checked"),function () {
+            //拿到用户姓名
+            users += $(this).parents("tr").find("td:eq(2)").text() +',';
+            //拿到用户id
+            user_ids += $(this).parents("tr").find("td:eq(1)").text()+'-';
         });
-        users.substr(0,users.length-1);
-        if (confirm("确认删除【" + users + "】吗？")){
+//        users.substr(0,users.length-1);
+//        user_ids.substr(0,user_ids.length-1);
+        var ids = user_ids.substr(0,user_ids.length-1);
+        if (confirm("确认删除【" + users.substr(0,users.length-1) + "】吗？")){
             //发送ajax请求
+            $.ajax({
+                url:"${pageContext.request.contextPath}/main/deleteUser.action",
+                data:"users_id="+ids,
+                type:"post",
+                success:function (result) {
+                    if (result.status_code=="200"){
+                        alert("删除成功");
+                    }else {
+                        alert("删除失败");
+                    }
+                    to_page(currentPage);
+                }
+            });
 
         }
     });

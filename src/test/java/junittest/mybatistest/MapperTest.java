@@ -41,9 +41,9 @@ public class MapperTest {
         System.out.println(userList);*/
         //可以执行批量操作的sqlSession
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        for (int i = 0; i < 1000; i++) {
-            String uuid = UUID.randomUUID().toString().substring(0,5)+i;
-            mapper.insertSelective(new User(null,uuid,"111",uuid+i,uuid+"@163.com"));
+        for (int i = 0; i < 10000; i++) {
+            String uuid = UUID.randomUUID().toString().substring(0,5);
+            mapper.insertSelective(new User(null,uuid,"111",uuid,uuid+"@163.com"));
         }
     }
 

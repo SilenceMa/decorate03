@@ -40,7 +40,10 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void deleteUser(List<Integer> idList) throws Exception {
-		
+		UserExample example = new UserExample();
+		UserExample.Criteria criteria =example.createCriteria();
+		criteria.andIdIn(idList);
+		userMapper.deleteByExample(example);
 	}
 
 	@Override
